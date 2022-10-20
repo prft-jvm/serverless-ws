@@ -29,7 +29,7 @@ Default output format [json]
 
 ### Create micronaut project
 
-For any resource created during this workshop, make sure to have as name prefix *"workshop"*.
+**_NOTE:_** For any resource created during this workshop, make sure to have as name prefix *"workshop"*.
 
 3. Using the terminal, go to the folder where you want to generate the project and run the following commands:
 
@@ -53,11 +53,11 @@ From Windows bash console
 From Intellij embedded maven menu
 `Maven -> Eecute Maven Goal -> mvn package -Dpackaging=docker-native -Dmicronaut.runtime=lambda -Pgraalvm`
 
-This will build the GraalVM native image **inside a docker container** and generate the `function.zip` ready for the deployment.
+This will build the GraalVM native image **inside a docker container** and generate the `function.zip` in the target folder ready for the deployment.
 
 ### Login AWS portal
 
-5. Now you are able to test your lambda function throug the AWS Portal, you can access it using the [training console link]
+5.  You will need ACCOUNT_ID to deploy the lambda function in aws. You can get it by accesing the aws web UI using the [training console link]
 (https://psl-training.signin.aws.amazon.com/console)
 
 Use the credentials **provided by the Perficient team**
@@ -78,14 +78,14 @@ You have to run from **target** folder the next command
 
 ```bash
 change [YOUR_NAME] by an specific identifier for your lambda
-change [ACCOUNT_NUMBER] and use the Account ID *without the middle dash(-)* from the portal menu in the user top right corner
+change [ACCOUNT_ID] and use the Account ID *without the middle dash(-)* from the portal menu in the user top right corner
 
-aws lambda create-function --function-name workshop-clei-function-[YOUR_NAME] --runtime provided.al2 --zip-file fileb://function.zip --handler com.perficient.FunctionRequestHandler --role "arn:aws:iam::[ACCOUNT_NUMBER]:role/lambda-fn-one-role"
+aws lambda create-function --function-name workshop-clei-function-[YOUR_NAME] --runtime provided.al2 --zip-file fileb://target/function.zip --handler com.perficient.FunctionRequestHandler --role "arn:aws:iam::[ACCOUNT_ID]:role/lambda-fn-one-role"
 ```
 
 ### Testing Lambda from AWS Portal
 
-7. Try testing the function, search for *Lambda* in the portal search bar.
+7. Now you are able to test your lambda function using the AWS Portal. Try testing it, search for *Lambda* in the portal search bar.
 There is the list of the AWS lambda functions
 Enter in your lambda
 
@@ -167,6 +167,16 @@ In Stage select dev
  Name = workshop-clei-api-key-[YOUR_NAME]
  
  Then click "Done"
+ 
+### Require API key on a method
+
+The following procedure describes how to configure an API method to require an API key.
+
+- In the API Gateway main navigation pane, choose Resources.
+- Under Resources, create a new method or choose an existing one.
+- Choose Method Request.
+- Under the Settings section, choose true for API Key Required.
+- Select the checkmark icon to save the settings.
 
 ### Re-Deploy the API Gateway
 
