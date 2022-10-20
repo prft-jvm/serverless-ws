@@ -53,14 +53,14 @@ From Windows bash console
 From Intellij embedded maven menu
 `Maven -> Eecute Maven Goal -> mvn package -Dpackaging=docker-native -Dmicronaut.runtime=lambda -Pgraalvm`
 
-This will build the GraalVM native image *inside a docker container* and generate the `function.zip` ready for the deployment.
+This will build the GraalVM native image **inside a docker container** and generate the `function.zip` ready for the deployment.
 
 ### Login AWS portal
 
 5. Now you are able to test your lambda function throug the AWS Portal, you can access it using the [training console link]
 (https://psl-training.signin.aws.amazon.com/console)
 
-Use the credentials *provided by the Perficient team*
+Use the credentials **provided by the Perficient team**
 
 ```bash
 IAM user name = [YOUR_USER]
@@ -74,11 +74,11 @@ You can use the same password adding an '*' at the end of the password
 
 6. In the project target folder you must have the native zipped function, you need to deploy it in AWS using the following command:
 
-You have to run from *target* folder the next command
+You have to run from **target** folder the next command
 
 ```bash
-*change [YOUR_NAME] by an specific identifier for your lambda* 
-*change [ACCOUNT_NUMBER] and use the Account ID *without the middle dash(-)* from the portal menu in the user top right corner*
+change [YOUR_NAME] by an specific identifier for your lambda
+change [ACCOUNT_NUMBER] and use the Account ID *without the middle dash(-)* from the portal menu in the user top right corner
 
 aws lambda create-function --function-name workshop-clei-function-[YOUR_NAME] --runtime provided.al2 --zip-file fileb://function.zip --handler com.perficient.FunctionRequestHandler --role "arn:aws:iam::[ACCOUNT_NUMBER]:role/lambda-fn-one-role"
 ```
@@ -89,9 +89,9 @@ aws lambda create-function --function-name workshop-clei-function-[YOUR_NAME] --
 There is the list of the AWS lambda functions
 Enter in your lambda
 
-Select the "Test" menu
+Select the **Test** menu
 
-Then click on "Test" button
+Then click on **Test** button
 
 The response body must be
 
@@ -107,7 +107,7 @@ The response body must be
 8. Now you need to create an API Gateway to be able to call the lambda function using a public URL. Run the following command to create the gateway:
 
 ```bash
-*change [YOUR_NAME] by an specific identifier for your API Gateway* 
+change [YOUR_NAME] by an specific identifier for your API Gateway
 
 aws apigateway create-rest-api --name workshop-clei-apigateway-[YOUR_NAME] --region us-east-1
 ```
@@ -118,17 +118,17 @@ aws apigateway create-rest-api --name workshop-clei-apigateway-[YOUR_NAME] --reg
 
 Enter in your API Gateway
 
-`Resources > Actions > Create Method > In the drop down list *select GET method*`
+`Resources > Actions > Create Method > In the drop down list select GET method`
 
 Select the GET method
 
-In the Lambda Function *autocomplete* search your lambda function
+In the Lambda Function **autocomplete** search your lambda function
 
 Save the change
 
 ### Testing Lambda from AWS API Gateway
 
-10. Click on the GET method > click on "Test" option with the Thunder icon > click on Test button and the response must be
+10. Click on the GET method > click on *Test* option with the Thunder icon > click on Test button and the response must be
 
 ```bash
 {"statusCode":200,"body":"{\"message\":\"Hello World\"}"}
@@ -145,7 +145,7 @@ Stage name = dev
 After save the deployment stage will appear the following error
 `User does not have ListWebACLs and AssociateWebACL permissions for Web Application Firewall (WAF Regional). Stage settings except for WAF can still be changed.`
 
-*Don't worry, for the account permissions, it will appear, but it won't be a problem for the exercise*
+***Don't worry, for the account permissions, it will appear, but it won't be a problem for the exercise***
 
 ### Define a usage plan for your API
 
@@ -160,20 +160,20 @@ Quota rate = 100
 ```
 define a usage plan with value 1000 for Rate, Brust and Quota. Click on next and add the API and stage created.
 
-*Add API Stages*
+**Add API Stages**
 
 In API select in the drop down menu your api gate way
 In Stage select dev
 
 
-*Create API Key and add to usage plan*
+**Create API Key and add to usage plan**
  Name = workshop-clei-api-key-[YOUR_NAME]
  
  Then click "Done"
 
 ### Re-Deploy the API Gateway
 
-13. Under the api gateway created, go to resources > actions > deploy api and select the deployment stage "dev", then click deploy.
+13. Under the api gateway created, go to resources > actions > deploy api and select the deployment stage *dev*, then click deploy.
 
 ### Access the API gateway
 
