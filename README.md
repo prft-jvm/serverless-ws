@@ -41,6 +41,8 @@ This will create a `Hello world` project ready to be used in aws lambda.
 
 4. Once you have reviewed the project with your IDE, you can generate the native image, in the project root run:
 
+**_NOTE:_** Make sure to have docker running.
+
 From unix OS
 `./mvnw package -Dpackaging=docker-native -Dmicronaut.runtime=lambda -Pgraalvm`
 
