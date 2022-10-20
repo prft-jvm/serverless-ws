@@ -157,7 +157,7 @@ Throttling rate = 100
 Burst rate = 100
 Quota rate = 100
 ```
-define a usage plan with value 1000 for Rate, Brust and Quota. Click on next and add the API and stage created.
+define a usage plan with value 100 for Rate, Brust and Quota. Click on next and add the API and stage created.
 
 **Add API Stages**
 
