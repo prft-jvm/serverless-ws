@@ -172,7 +172,7 @@ In Stage select dev
  
 ### Require API key on a method
 
-The following procedure describes how to configure an API method to require an API key.
+13. The following procedure describes how to configure an API method to require an API key.
 
 - In the API Gateway main navigation pane, choose Resources.
 - Under Resources, create a new method or choose an existing one.
@@ -182,9 +182,9 @@ The following procedure describes how to configure an API method to require an A
 
 ### Re-Deploy the API Gateway
 
-13. Under the api gateway created, go to resources > actions > deploy api and select the deployment stage *dev*, then click deploy.
+14. Under the api gateway created, go to resources > actions > deploy api and select the deployment stage *dev*, then click deploy.
 
 ### Access the API gateway
 
-14. Under the api gateway created, go to stages section and select the stage defined. The UI will show you a invoke URL, use it to access the API Gateway. Make sure to add your api key as header `x-api-key` for the request to work.
+15. Under the api gateway created, go to stages section and select the stage defined. The UI will show you a invoke URL, use it to access the API Gateway. Make sure to add your api key as header `x-api-key` for the request to work.
 
