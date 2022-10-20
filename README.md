@@ -1,4 +1,4 @@
-# serverless-ws
+# Serverless-ws
 Serverless workshop with AWS Lambda, GraalVM and Micronaut
 
 ## Step by step guide
@@ -15,84 +15,167 @@ Serverless workshop with AWS Lambda, GraalVM and Micronaut
 
 ### Login AWS cli
 
-2. Run the command on the terminal `aws configure` and use the credentials provided by the Perficient team, make sure you make your default region as us-east-1. By doing this, you will be able to xreate resources from the CLI.
+2. Run the command on the terminal `aws configure` and use the credentials *provided by the Perficient team*
+Make sure you make your default region as *us-east-1*. By doing this, you will be able to create resources from the CLI.
 
-For any resource created during this workshop, make sure to have as name prefix "workshop".
+```bash
+aws configure
+
+AWS Access Key ID  [YOUR_ACCESS_KEY]
+AWS Secret Access Key  [YOUR_SECRET_KEY] 
+Default region name [us-east-1]
+Default output format [json]
+```
 
 ### Create micronaut project
 
-3. Using the terminal, go to the folder where you will be working and run the following commands:
+For any resource created during this workshop, make sure to have as name prefix *"workshop"*.
 
+3. Using the terminal, go to the folder where you want to generate the project and run the following commands:
 
-`mn create-function-app com.perficient.fn-one --features=graalvm,aws-lambda --build=maven --lang=java`
-
+`mn create-function-app com.perficient.workshop-clei-function --features=graalvm,aws-lambda --build=maven --lang=java`
 
 This will create a `Hello world` project ready to be used in aws lambda.
 
 ### Create native image
 
-4. Once you have reviewed the project, to deploy to AWS Lambda as a GraalVM native image, run:
+4. Once you have reviewed the project with your IDE, you can generate the native image, in the project root run:
+
+From unix OS
+`./mvnw package -Dpackaging=docker-native -Dmicronaut.runtime=lambda -Pgraalvm`
+
+From Windows Powershell
+`mvn package '-Dpackaging=docker-native' '-Dmicronaut.runtime=lambda' '-Pgraalvm'`
+
+From Windows bash console
+`mvn package -Dpackaging=docker-native -Dmicronaut.runtime=lambda -Pgraalvm`
+
+From Intellij embedded maven menu
+`Maven -> Eecute Maven Goal -> mvn package -Dpackaging=docker-native -Dmicronaut.runtime=lambda -Pgraalvm`
+
+This will build the GraalVM native image *inside a docker container* and generate the `function.zip` ready for the deployment.
+
+### Login AWS portal
+
+5. Now you are able to test your lambda function throug the AWS Portal, you can access it using the [training console link]
+(https://psl-training.signin.aws.amazon.com/console)
+
+Use the credentials *provided by the Perficient team*
 
 ```bash
-./mvnw package -Dpackaging=docker-native -Dmicronaut.runtime=lambda -Pgraalvm
+IAM user name = [YOUR_USER]
+Password = [YOUR_PASSWORD]
 ```
 
-This will build the GraalVM native image inside a docker container and generate the `function.zip` ready for the deployment.
+Once logged in, AWS will ask you to change the password
+You can use the same password adding an '*' at the end of the password
 
 ### Deploy function to AWS Lambda
 
-5. Once you have the zip folder with the function you need to create it in AWS using the following command:
+6. In the project target folder you must have the native zipped function, you need to deploy it in AWS using the following command:
 
-`aws lambda create-function --function-name workshop-fn-one-micronaut --runtime provided.al2 --zip-file fileb://function.zip --handler com.perficient.FunctionRequestHandler --role "arn:aws:iam::{account_number}:role/lambda-fn-one-role"`
+You have to run from *target* folder the next command
 
-Now you are able to test your lambda function throug the AWS UI, you can access it using the [training console link](https://psl-training.signin.aws.amazon.com/console)
+```bash
+*change [YOUR_NAME] by an specific identifier for your lambda* 
+*change [ACCOUNT_NUMBER] and use the Account ID *without the middle dash(-)* from the portal menu in the user top right corner*
 
-Try testing the function with the following payload
+aws lambda create-function --function-name workshop-clei-function-[YOUR_NAME] --runtime provided.al2 --zip-file fileb://function.zip --handler com.perficient.FunctionRequestHandler --role "arn:aws:iam::[ACCOUNT_NUMBER]:role/lambda-fn-one-role"
+```
+
+### Testing Lambda from AWS Portal
+
+7. Try testing the function, search for *Lambda* in the portal search bar.
+There is the list of the AWS lambda functions
+Enter in your lambda
+
+Select the "Test" menu
+
+Then click on "Test" button
+
+The response body must be
 
 ```bash
 {
-	"path": "/",
-	"httpMethod": "GET",
-	"headers": {
-		"Accept": "application/json"
-	}
+  "statusCode": 200,
+  "body": "{\"message\":\"Hello World\"}"
 }
 ```
 
-
 ### Create an API Gateway
 
-6. Now you need to create an API Gateway to be able to call the lambda function using a public URL. Run the following command to create the gateway:
+8. Now you need to create an API Gateway to be able to call the lambda function using a public URL. Run the following command to create the gateway:
 
-`aws apigateway create-rest-api --name 'workshop-apigateway' --region us-east-1`
+```bash
+*change [YOUR_NAME] by an specific identifier for your API Gateway* 
 
-Make sure to copy the API Gateway identifier once created.
+aws apigateway create-rest-api --name workshop-clei-apigateway-[YOUR_NAME] --region us-east-1
+```
 
-### Create a resource to access the lambda function
+### Create a method GET to access the lambda function
 
-7. Using the AWS API Gateway UI, create a resource in the gateway you created an link the lambda function created in step 5.
+9. Using the AWS API Gateway UI, create the method GET in the gateway 
+
+Enter in your API Gateway
+
+`Resources > Actions > Create Method > In the drop down list *select GET method*`
+
+Select the GET method
+
+In the Lambda Function *autocomplete* search your lambda function
+
+Save the change
+
+### Testing Lambda from AWS API Gateway
+
+10. Click on the GET method > click on "Test" option with the Thunder icon > click on Test button and the response must be
+
+```bash
+{"statusCode":200,"body":"{\"message\":\"Hello World\"}"}
+```
 
 ### Define a deployment stage for the API Gateway
 
-8. Under the api gateway cteated, go to resources > actions > deploy api and define a deployment stage.
+11. Under the api gateway created, go to resources > actions > deploy api > deployment stage
+
+Create a new deployment stage
+
+Stage name = dev
+
+After save the deployment stage will appear the following error
+`User does not have ListWebACLs and AssociateWebACL permissions for Web Application Firewall (WAF Regional). Stage settings except for WAF can still be changed.`
+
+*Don't worry, for the account permissions, it will appear, but it won't be a problem for the exercise*
 
 ### Define a usage plan for your API
 
-9. Under API Gateway > Usage plans, click on create button and define a usage plan with value 1000 for Rate, Brust and Quota. Click on next and add the API and stage created.
+12. Under API Gateway > Usage plans > create 
 
-### Create an API key
+```bash
+Name = workshop-clei-usage-plan-[YOUR_NAME]
 
-10. Under API Gateway > API Keys, create an apikey.
+Throttling rate = 100
+Burst rate = 100
+Quota rate = 100
+```
+define a usage plan with value 1000 for Rate, Brust and Quota. Click on next and add the API and stage created.
 
-### Assign the Key to the usage plan
+*Add API Stages*
 
-11. Under API Gateway > Usage plans, select the usage plan you created. Go to the API keys tab and click on Add API key to usage plan, type the name of the key created.
+In API select in the drop down menu your api gate way
+In Stage select dev
 
-### Deploy the API Gateway
 
-12. Under the api gateway cteated, go to resources > actions > deploy api and select the deployment stage created, then click deploy.
+*Create API Key and add to usage plan*
+ Name = workshop-clei-api-key-[YOUR_NAME]
+ 
+ Then click "Done"
+
+### Re-Deploy the API Gateway
+
+13. Under the api gateway created, go to resources > actions > deploy api and select the deployment stage "dev", then click deploy.
 
 ### Access the API gateway
 
-13. Under the api gateway cteated, go to stages section and select the stage defined. The UI will show you a invoke URL, use it to access the API Gateway. Make sure to add your api key as header `x-api-key` for the request to work.
+14. Under the api gateway created, go to stages section and select the stage defined. The UI will show you a invoke URL, use it to access the API Gateway. Make sure to add your api key as header `x-api-key` for the request to work.
 
