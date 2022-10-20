@@ -142,10 +142,7 @@ Create a new deployment stage
 
 Stage name = dev
 
-After save the deployment stage will appear the following error
-`User does not have ListWebACLs and AssociateWebACL permissions for Web Application Firewall (WAF Regional). Stage settings except for WAF can still be changed.`
-
-***Don't worry, for the account permissions, it will appear, but it won't be a problem for the exercise***
+Click on deploy button
 
 ### Define a usage plan for your API
 
