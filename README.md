@@ -186,5 +186,21 @@ In Stage select dev
 
 ### Access the API gateway
 
-15. Under the api gateway created, go to stages section and select the stage defined. The UI will show you a invoke URL, use it to access the API Gateway. Make sure to add your api key as header `x-api-key` for the request to work.
+15. Under the api gateway created, go to stages section and select the stage defined. The UI will show you a invoke URL, use it to access the API Gateway. 
+
+### Postman or any API platform
+
+16. Define the GET method, paste the invoke url from the step 15.
+
+In the headers tab, add the next header.
+
+```bash
+change [YOUR_API_KEY] from the menu API keys > select your API key > click on show API key
+
+x-api-key = [YOUR_API_KEY]
+```
+
+Then run execute the request
+
+### Congratulations, there is the Hello World
 
